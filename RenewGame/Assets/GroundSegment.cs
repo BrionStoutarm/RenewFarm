@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class GroundSegment : MonoBehaviour
 {
-    public Color startTopColor;
-    public Color startSideColor;
+    public Color startColor;
+    //public Color startSideColor;
     public Color highlightColor;
 
     GameObject curHoveredSide;
@@ -22,6 +22,11 @@ public class GroundSegment : MonoBehaviour
 
     }
 
+    private void OnMouseDown()
+    {
+        Destroy(this.gameObject);
+    }
+
     private void OnMouseEnter()
     {
         Debug.Log("Mouse Enter");
@@ -34,26 +39,13 @@ public class GroundSegment : MonoBehaviour
             return;
         }
 
-        GameObject side = hit.collider.gameObject;
-        if(side)
-        {
-            side.GetComponent<Renderer>().material.color = highlightColor;
-            curHoveredSide = side;
-        }
+        GetComponent<Renderer>().material.color = highlightColor;
     }
 
     private void OnMouseExit()
     {
-        if(curHoveredSide)
-        {
-            if (curHoveredSide.name == "Top")
-            {
-                curHoveredSide.GetComponent<Renderer>().material.color = startTopColor;
-            }
-            else
-                curHoveredSide.GetComponent<Renderer>().material.color = startSideColor;
-        }
-        curHoveredSide = null;
+        GetComponent<Renderer>().material.color = startColor;
+
         Debug.Log("Mouse Exit");
     }
 }
