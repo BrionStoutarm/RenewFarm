@@ -24,7 +24,7 @@ public class GroundSegment : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if(TerrainManipToggle.isTerrainManip())
+        if(TerrainManipToggle.isTerrainDestroy())
             Destroy(this.gameObject);
     }
 

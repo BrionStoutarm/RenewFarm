@@ -4,14 +4,39 @@ using UnityEngine;
 
 public class TerrainManipToggle : MonoBehaviour
 {
-    static bool terrainManipOn = false;
+    static bool terrainDestroyOn = false;
+    static bool terrainPlaceOn = false;
+    static bool showTerrainMenu = false;
+
     public void ToggleTerrainManip ()
     {
-        terrainManipOn = !terrainManipOn;
+        terrainDestroyOn = !terrainDestroyOn;
+        Debug.Log("Turning Terrain Destroy to: " + terrainPlaceOn.ToString());
     }
 
-    public static bool isTerrainManip()
+    public static bool isTerrainDestroy()
     {
-        return terrainManipOn;
+        return terrainDestroyOn;
+    }
+
+    public void ToggleTerrainPlace()
+    {
+        terrainPlaceOn = !terrainPlaceOn;
+        Debug.Log("Turning Terrain Place to: " + terrainPlaceOn.ToString());
+    }
+
+    public static bool isTerrainPlace()
+    {
+        return terrainPlaceOn;
+    }
+
+    public void ToggleTerrainMenu()
+    {
+        showTerrainMenu = !showTerrainMenu;
+    }
+
+    public static bool showTerrainManipMenu()
+    {
+        return showTerrainMenu;
     }
 }
