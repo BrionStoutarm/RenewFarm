@@ -9,6 +9,16 @@ public class MapGenerator : MonoBehaviour
     // Start is called before the first frame update
     public GameObject groundSeg;
     public int m_width, m_height, m_depth;
+
+    private PlacementGrid m_grid;
+
+    private void Awake()
+    {
+        m_grid = FindObjectOfType<PlacementGrid>();
+        if (m_grid)
+            Debug.Log("Got Grid");
+    }
+
     void Start()
     {
         GenerateMap(m_width, m_height, m_depth);
@@ -28,7 +38,8 @@ public class MapGenerator : MonoBehaviour
             {
                 for(int k = 0; k < depth; k++)
                 {
-                    Instantiate(groundSeg, new Vector3(i+1, j+1, k+1), Quaternion.identity);
+                    Vector3 vec = new Vector3(i + 1, j + 1, k + 1);
+                    Instantiate(groundSeg, m_grid.GetNearestPointOnGrid(vec), Quaternion.identity);
                 }
             }
         }

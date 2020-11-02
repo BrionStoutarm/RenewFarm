@@ -8,12 +8,9 @@ public class GroundSegment : MonoBehaviour
     //public Color startSideColor;
     public Color highlightColor;
 
-    GameObject curHoveredSide;
-
     // Start is called before the first frame update
     void Start()
     {
-        curHoveredSide = null;
     }
 
     // Update is called once per frame
@@ -30,13 +27,13 @@ public class GroundSegment : MonoBehaviour
 
     private void OnMouseEnter()
     {
-        Debug.Log("Mouse Enter");
+        //Debug.Log("Mouse Enter");
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
         if (!Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit))
         {
-            Debug.Log("Missed");
+            //Debug.Log("Missed");
             return;
         }
 
@@ -47,6 +44,6 @@ public class GroundSegment : MonoBehaviour
     {
         GetComponent<Renderer>().material.color = startColor;
 
-        Debug.Log("Mouse Exit");
+        //Debug.Log("Mouse Exit");
     }
 }

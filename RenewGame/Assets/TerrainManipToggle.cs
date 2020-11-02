@@ -11,6 +11,8 @@ public class TerrainManipToggle : MonoBehaviour
     public void ToggleTerrainManip ()
     {
         terrainDestroyOn = !terrainDestroyOn;
+        if (terrainDestroyOn)
+            terrainPlaceOn = false;
         Debug.Log("Turning Terrain Destroy to: " + terrainPlaceOn.ToString());
     }
 
@@ -22,6 +24,8 @@ public class TerrainManipToggle : MonoBehaviour
     public void ToggleTerrainPlace()
     {
         terrainPlaceOn = !terrainPlaceOn;
+        if (terrainPlaceOn)
+            terrainDestroyOn = false;
         Debug.Log("Turning Terrain Place to: " + terrainPlaceOn.ToString());
     }
 
