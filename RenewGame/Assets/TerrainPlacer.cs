@@ -24,64 +24,58 @@ public class TerrainPlacer : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(0))
             {
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                //Debug.DrawLine(ray.GetPoint(100.0f), Camera.main.transform.position, Color.red, 10.0f);
-
-                RaycastHit hit;
-
-                if (Physics.Raycast(ray, out hit))
-                {
-                    //Find side of cube raycast hits
-                    Vector3 placePos = hit.collider.gameObject.transform.position;
-                    int hitSide = FindSideHit(hit);
-                    
-                    switch(hitSide)
-                    {
-                        case 1:                 //top
-                            Debug.Log("Placing on top");
-                            placePos.y += 1;
-                            break;
-                        case -1:                //bottom
-                            Debug.Log("Placing on bottom");
-                            placePos.y -= 1;
-                            break;
-                        case 2:                 //right
-                            Debug.Log("Placing on right");
-                            placePos.x += 1;
-                            break;
-                        case 3:                 //front
-                            Debug.Log("Placing on front");
-                            placePos.z -= 1;
-                            break;
-                        case 4:                 //left
-                            Debug.Log("Placing on left");
-                            placePos.x -= 1;
-                            break;
-                        case 5:                 //back
-                            Debug.Log("Placing on back");
-                            placePos.z += 1;
-                            break;
-                    }
-
-                    PlaceTerrainAt(placePos);
-                }
+                PlaceTerrain();
             }
 
         }
     }
+    private void PlaceTerrain()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        //Debug.DrawLine(ray.GetPoint(100.0f), Camera.main.transform.position, Color.red, 10.0f);
 
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit))
+        {
+            //Find side of cube raycast hits
+            Vector3 placePos = hit.collider.gameObject.transform.position;
+            int hitSide = FindSideHit(hit);
+
+            switch (hitSide)
+            {
+                case 1:                 //top
+                    placePos.y += 1;
+                    break;
+                case -1:                //bottom
+                    placePos.y -= 1;
+                    break;
+                case 2:                 //right
+                    placePos.x += 1;
+                    break;
+                case 3:                 //front
+                    placePos.z -= 1;
+                    break;
+                case 4:                 //left
+                    placePos.x -= 1;
+                    break;
+                case 5:                 //back
+                    placePos.z += 1;
+                    break;
+            }
+
+            PlaceTerrainAt(placePos);
+        }
+    }
     int FindSideHit(RaycastHit hit)
     {
         Transform cubeTransform = hit.collider.gameObject.transform;
 
-        Debug.DrawLine(cubeTransform.position, hit.point, Color.red, 10f);
+        //Debug.DrawLine(cubeTransform.position, hit.point, Color.red, 10f);
 
         float dot = Vector3.Dot(cubeTransform.up, hit.normal);
-        Debug.Log("Dot = " + dot.ToString());
 
         float angle = Vector3.SignedAngle(hit.normal, transform.right, Vector3.up);
-
-        Debug.Log("Angle = " + angle.ToString());
 
         if (dot == 1) //top
             return 1;
