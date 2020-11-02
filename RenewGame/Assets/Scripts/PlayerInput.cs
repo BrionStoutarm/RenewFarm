@@ -18,7 +18,7 @@ public class PlayerInput : MonoBehaviour
             //Double left click
 
             //Debug.Log("entry left click");
-            HandleLeftClick();
+            //HandleLeftClick();
         }
     }
 
