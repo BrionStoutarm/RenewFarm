@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GroundSegment : MonoBehaviour
+public class GroundSegment : Placeable
 {
     public Color startColor;
     //public Color startSideColor;
@@ -21,7 +21,7 @@ public class GroundSegment : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if(TerrainManipToggle.isTerrainDestroy())
+        if(TerrainManipToggle.isDestroy())
             Destroy(this.gameObject);
     }
 
