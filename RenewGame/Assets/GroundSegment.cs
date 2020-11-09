@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class GroundSegment : Placeable
 {
-    public Color startColor;
-    //public Color startSideColor;
-    public Color highlightColor;
 
     // Start is called before the first frame update
     void Start()
@@ -21,29 +18,8 @@ public class GroundSegment : Placeable
 
     private void OnMouseDown()
     {
-        if(TerrainManipToggle.isDestroy())
+        if(TerrainManipTools.isDestroy())
             Destroy(this.gameObject);
     }
 
-    private void OnMouseEnter()
-    {
-        //Debug.Log("Mouse Enter");
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-
-        if (!Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit))
-        {
-            //Debug.Log("Missed");
-            return;
-        }
-
-        GetComponent<Renderer>().material.color = highlightColor;
-    }
-
-    private void OnMouseExit()
-    {
-        GetComponent<Renderer>().material.color = startColor;
-
-        //Debug.Log("Mouse Exit");
-    }
 }

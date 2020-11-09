@@ -2,17 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TerrainManipToggle : MonoBehaviour
+public class TerrainManipTools : MonoBehaviour
 {
     static bool m_destroy = false;
     static bool m_place = false;
     static bool showTerrainMenu = false;
+    public Placeable m_basicGroundSeg;
+    public ObjectPlacer m_placer;
 
-    public void ToggleTerrainManip ()
+    public void ToggleTerrainDestroy ()
     {
         m_destroy = !m_destroy;
-        if (m_destroy)
+        if (m_destroy) 
+        {
             m_place = false;
+            m_placer.SetPlaceMode(false);
+            m_placer.SetObjectToPlace(null);
+        }
         Debug.Log("Turning Terrain Destroy to: " + m_place.ToString());
     }
 
@@ -25,7 +31,17 @@ public class TerrainManipToggle : MonoBehaviour
     {
         m_place = !m_place;
         if (m_place)
+        {
+            m_placer.SetObjectToPlace(m_basicGroundSeg);
+            m_placer.SetPlaceMode(true);
             m_destroy = false;
+        }
+        else
+        {
+            m_placer.SetPlaceMode(false);
+            m_placer.SetObjectToPlace(null);
+        }
+
         Debug.Log("Turning Terrain Place to: " + m_place.ToString());
     }
 

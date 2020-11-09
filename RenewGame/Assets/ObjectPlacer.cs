@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TerrainPlacer : MonoBehaviour
+public class ObjectPlacer : MonoBehaviour
 {
-    private PlacementGrid m_grid;
-    public GameObject groundSeg;
-
+    public Placeable m_objectToPlace = null;
+    private bool m_placeMode = false;
+    private GameObject m_preview = null;
     private void Awake()
     {
-        m_grid = FindObjectOfType<PlacementGrid>();
     }
     // Start is called before the first frame update
     void Start()
@@ -20,26 +19,62 @@ public class TerrainPlacer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(TerrainManipToggle.isTerrainPlace())
+        if (m_placeMode && m_objectToPlace)
         {
+            //Get mouse point
+            Vector3 placeLoc = GetPlaceLoc();
+
+            //Show preview
+            ShowPreview(placeLoc);
+
+            //Place object
             if (Input.GetMouseButtonDown(0))
             {
-                PlaceTerrain();
+                Instantiate(m_objectToPlace).transform.position = placeLoc;
             }
-
         }
     }
-    private void PlaceTerrain()
+
+    private void ShowPreview(Vector3 placeLoc)
+    {
+        if (m_preview)
+        {
+            m_preview.transform.position = placeLoc;
+            if(placeLoc.z < 0)
+                Debug.Log("Position: " + placeLoc);
+        }
+        else
+        {
+            Debug.Log("Should only see this once");
+            m_preview =  GameObject.CreatePrimitive(PrimitiveType.Cube);
+            m_preview.layer = LayerMask.NameToLayer("Ignore Raycast");
+            //var color = m_preview.gameObject.GetComponent<Renderer>().material.color;
+            //var newColor = new Color(color.r, color.g, color.b, 0.5f);
+            //m_preview.gameObject.GetComponent<Renderer>().material.color = newColor;
+            //Instantiate(m_preview, placeLoc, Quaternion.identity);
+        }
+    }
+
+    public void SetObjectToPlace(Placeable obj)
+    {
+        m_objectToPlace = null;
+        m_objectToPlace = obj;
+    }
+
+    public bool IsPlacing() { return m_placeMode; }
+    public void SetPlaceMode(bool val) { m_placeMode = val; }
+
+    Vector3 GetPlaceLoc()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        //Debug.DrawLine(ray.GetPoint(100.0f), Camera.main.transform.position, Color.red, 10.0f);
 
         RaycastHit hit;
+        Vector3 placePos = new Vector3(0, 0, 0);
 
         if (Physics.Raycast(ray, out hit))
         {
             //Find side of cube raycast hits
-            Vector3 placePos = hit.collider.gameObject.transform.position;
+            placePos = hit.collider.gameObject.transform.position;
             int hitSide = FindSideHit(hit);
 
             switch (hitSide)
@@ -63,10 +98,16 @@ public class TerrainPlacer : MonoBehaviour
                     placePos.z += 1;
                     break;
             }
-
-            PlaceTerrainAt(placePos);
         }
+        else
+        {
+            placePos = Input.mousePosition + new Vector3(10, -10, 0);
+        }
+        if (placePos.z < 0)
+            Debug.Log("Here");
+        return placePos;
     }
+
     int FindSideHit(RaycastHit hit)
     {
         Transform cubeTransform = hit.collider.gameObject.transform;
@@ -97,10 +138,5 @@ public class TerrainPlacer : MonoBehaviour
 
 
         return 0;
-    }
-
-    private void PlaceTerrainAt(Vector3 point)
-    {
-        Instantiate(groundSeg).transform.position = point;
     }
 }
