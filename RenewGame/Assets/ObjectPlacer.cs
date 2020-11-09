@@ -28,6 +28,7 @@ public class ObjectPlacer : MonoBehaviour
             ShowPreview(placeLoc);
 
             //Place object
+            //TODO:  make sure placeLoc is in playable bounds
             if (Input.GetMouseButtonDown(0))
             {
                 Instantiate(m_objectToPlace).transform.position = placeLoc;
@@ -46,7 +47,7 @@ public class ObjectPlacer : MonoBehaviour
         else
         {
             Debug.Log("Should only see this once");
-            m_preview =  GameObject.CreatePrimitive(PrimitiveType.Cube);
+            m_preview =  Instantiate(m_objectToPlace.gameObject);
             m_preview.layer = LayerMask.NameToLayer("Ignore Raycast");
             //var color = m_preview.gameObject.GetComponent<Renderer>().material.color;
             //var newColor = new Color(color.r, color.g, color.b, 0.5f);
