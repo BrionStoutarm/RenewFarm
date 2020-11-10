@@ -41,8 +41,6 @@ public class ObjectPlacer : MonoBehaviour
         if (m_preview)
         {
             m_preview.transform.position = placeLoc;
-            if(placeLoc.z < 0)
-                Debug.Log("Position: " + placeLoc);
         }
         else
         {
@@ -75,37 +73,35 @@ public class ObjectPlacer : MonoBehaviour
         if (Physics.Raycast(ray, out hit))
         {
             //Find side of cube raycast hits
-            placePos = hit.collider.gameObject.transform.position;
-            int hitSide = FindSideHit(hit);
+            //placePos = hit.collider.gameObject.transform.position;
+            //int hitSide = FindSideHit(hit);
 
-            switch (hitSide)
-            {
-                case 1:                 //top
-                    placePos.y += 1;
-                    break;
-                case -1:                //bottom
-                    placePos.y -= 1;
-                    break;
-                case 2:                 //right
-                    placePos.x += 1;
-                    break;
-                case 3:                 //front
-                    placePos.z -= 1;
-                    break;
-                case 4:                 //left
-                    placePos.x -= 1;
-                    break;
-                case 5:                 //back
-                    placePos.z += 1;
-                    break;
-            }
+            //switch (hitSide)
+            //{
+            //    case 1:                 //top
+            //        placePos.y += 1;
+            //        break;
+            //    case -1:                //bottom
+            //        placePos.y -= 1;
+            //        break;
+            //    case 2:                 //right
+            //        placePos.x += 1;
+            //        break;
+            //    case 3:                 //front
+            //        placePos.z -= 1;
+            //        break;
+            //    case 4:                 //left
+            //        placePos.x -= 1;
+            //        break;
+            //    case 5:                 //back
+            //        placePos.z += 1;
+            //        break;
+            //}
+            Vector3 offset = m_objectToPlace.transform.localScale;
+            placePos = hit.point;
+            placePos.y = placePos.y + (offset.y / 2);
         }
-        else
-        {
-            placePos = Input.mousePosition + new Vector3(10, -10, 0);
-        }
-        if (placePos.z < 0)
-            Debug.Log("Here");
+
         return placePos;
     }
 

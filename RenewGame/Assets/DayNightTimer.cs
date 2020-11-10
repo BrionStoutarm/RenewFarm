@@ -34,7 +34,7 @@ public class DayNightTimer : MonoBehaviour
         if(m_minutes > 60)
         {
             m_hours++;
-
+            //Every hour villagers needs_levels will drop by their appropriate rates
         }
 
         if(m_hours >= 24)
