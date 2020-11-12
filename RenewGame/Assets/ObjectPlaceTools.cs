@@ -1,15 +1,26 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using UnityEngine;
 
-public class TerrainManipTools : MonoBehaviour
+public class ObjectPlaceTools : MonoBehaviour
 {
     static bool m_destroy = false;
     static bool m_place = false;
     static bool showTerrainMenu = false;
     public Placeable m_basicGroundSeg;
     public Placeable m_basicRamp;
+    public Placeable m_basicPath;
     public ObjectPlacer m_placer;
+
+
+    public void TogglePathwayPlace()
+    {
+        Debug.Log("Pathway Placement");
+        m_place = true;
+        m_placer.ClearPlacer();
+        m_placer.SetObjectToPlace(m_basicPath);
+    }
 
     public void ToggleTerrainDestroy ()
     {
@@ -17,7 +28,6 @@ public class TerrainManipTools : MonoBehaviour
         if (m_destroy) 
         {
             m_place = false;
-            m_placer.SetPlaceMode(false);
             m_placer.SetObjectToPlace(null);
         }
         Debug.Log("Turning Terrain Destroy to: " + m_place.ToString());
@@ -34,12 +44,10 @@ public class TerrainManipTools : MonoBehaviour
         if (m_place)
         {
             m_placer.SetObjectToPlace(m_basicGroundSeg);
-            m_placer.SetPlaceMode(true);
             m_destroy = false;
         }
         else
         {
-            m_placer.SetPlaceMode(false);
             m_placer.SetObjectToPlace(null);
         }
 
@@ -52,12 +60,10 @@ public class TerrainManipTools : MonoBehaviour
         if (m_place)
         {
             m_placer.SetObjectToPlace(m_basicRamp);
-            m_placer.SetPlaceMode(true);
             m_destroy = false;
         }
         else
         {
-            m_placer.SetPlaceMode(false);
             m_placer.SetObjectToPlace(null);
         }
     }

@@ -5,7 +5,6 @@ using UnityEngine;
 public class ObjectPlacer : MonoBehaviour
 {
     public Placeable m_objectToPlace = null;
-    private bool m_placeMode = false;
     private GameObject m_preview = null;
     private void Awake()
     {
@@ -19,8 +18,10 @@ public class ObjectPlacer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (m_placeMode && m_objectToPlace)
+        if (m_objectToPlace)
         {
+            m_objectToPlace.IsPlacing(true);
+
             //Get mouse point
             Vector3 placeLoc = GetPlaceLoc();
 
@@ -29,10 +30,13 @@ public class ObjectPlacer : MonoBehaviour
 
             //Place object
             //TODO:  make sure placeLoc is in playable bounds
+
             if (Input.GetMouseButtonDown(0))
             {
-                Instantiate(m_objectToPlace).transform.position = placeLoc;
+                //Instantiate(m_objectToPlace).transform.position = placeLoc;
+                m_objectToPlace.Place(placeLoc);
             }
+            
         }
     }
 
@@ -45,23 +49,28 @@ public class ObjectPlacer : MonoBehaviour
         else
         {
             Debug.Log("Should only see this once");
-            m_preview =  Instantiate(m_objectToPlace.gameObject);
+            m_preview = m_objectToPlace.GetPreview();
             m_preview.layer = LayerMask.NameToLayer("Ignore Raycast");
-            //var color = m_preview.gameObject.GetComponent<Renderer>().material.color;
-            //var newColor = new Color(color.r, color.g, color.b, 0.5f);
-            //m_preview.gameObject.GetComponent<Renderer>().material.color = newColor;
-            //Instantiate(m_preview, placeLoc, Quaternion.identity);
         }
+    }
+
+    public void ClearPreview()
+    {
+        m_preview = null;
+    }
+
+    public void ClearPlacer()
+    {
+        m_objectToPlace = null;
+        m_preview = null;
     }
 
     public void SetObjectToPlace(Placeable obj)
     {
         m_objectToPlace = null;
+        m_preview = null;
         m_objectToPlace = obj;
     }
-
-    public bool IsPlacing() { return m_placeMode; }
-    public void SetPlaceMode(bool val) { m_placeMode = val; }
 
     Vector3 GetPlaceLoc()
     {
@@ -72,31 +81,6 @@ public class ObjectPlacer : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit))
         {
-            //Find side of cube raycast hits
-            //placePos = hit.collider.gameObject.transform.position;
-            //int hitSide = FindSideHit(hit);
-
-            //switch (hitSide)
-            //{
-            //    case 1:                 //top
-            //        placePos.y += 1;
-            //        break;
-            //    case -1:                //bottom
-            //        placePos.y -= 1;
-            //        break;
-            //    case 2:                 //right
-            //        placePos.x += 1;
-            //        break;
-            //    case 3:                 //front
-            //        placePos.z -= 1;
-            //        break;
-            //    case 4:                 //left
-            //        placePos.x -= 1;
-            //        break;
-            //    case 5:                 //back
-            //        placePos.z += 1;
-            //        break;
-            //}
             Vector3 offset = m_objectToPlace.transform.localScale;
             placePos = hit.point;
             placePos.y = placePos.y + (offset.y / 2);

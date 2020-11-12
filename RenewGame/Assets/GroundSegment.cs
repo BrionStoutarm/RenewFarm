@@ -18,7 +18,7 @@ public class GroundSegment : Placeable
 
     private void OnMouseDown()
     {
-        if(TerrainManipTools.isDestroy())
+        if(ObjectPlaceTools.isDestroy())
             Destroy(this.gameObject);
     }
 

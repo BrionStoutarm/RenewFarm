@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CameraMovement : MonoBehaviour
 {
-    public float moveSpeed = 0.5f;
+    public float moveSpeed = 100f;
     public float scrollSpeed = 10f;
 
 

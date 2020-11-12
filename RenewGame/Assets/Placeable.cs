@@ -7,10 +7,11 @@ public class Placeable : MonoBehaviour
     public Color startColor;
     public Color highlightColor;
 
-
+    private bool m_isPlacing;
     // Start is called before the first frame update
     void Start()
     {
+        m_isPlacing = false;
     }
 
     // Update is called once per frame
@@ -20,4 +21,24 @@ public class Placeable : MonoBehaviour
     }
 
 
+    public virtual void Place(Vector3 position)
+    {
+        Instantiate(this.gameObject).transform.position = position;
+        IsPlacing(false);
+    }
+
+    public virtual GameObject GetPreview()
+    {
+        return Instantiate(this.gameObject);
+    }
+
+    public void IsPlacing(bool val)
+    {
+        m_isPlacing = val;
+    }
+
+    public bool IsPlacing()
+    {
+        return m_isPlacing;
+    }    
 }
