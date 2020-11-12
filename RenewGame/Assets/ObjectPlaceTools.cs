@@ -6,18 +6,34 @@ using UnityEngine;
 public class ObjectPlaceTools : MonoBehaviour
 {
     static bool m_destroy = false;
-    static bool m_place = false;
     static bool showTerrainMenu = false;
     public Placeable m_basicGroundSeg;
     public Placeable m_basicRamp;
     public Placeable m_basicPath;
-    public ObjectPlacer m_placer;
+    public Placeable m_basicFarm;
+    public Placeable m_basicIndustry;
 
+    public ObjectPlacer m_placer;
+    
+    public void PlaceBasicFarm()
+    {
+        m_placer.ClearPlacer();
+        m_placer.SetObjectToPlace(m_basicFarm);
+        m_destroy = false;
+        Debug.Log("placing farm");
+    }
+
+    public void PlaceBasicIndustry()
+    {
+        m_placer.ClearPlacer();
+        m_placer.SetObjectToPlace(m_basicIndustry);
+        m_destroy = false;
+        Debug.Log("placing industry");
+    }    
 
     public void TogglePathwayPlace()
     {
         Debug.Log("Pathway Placement");
-        m_place = true;
         m_placer.ClearPlacer();
         m_placer.SetObjectToPlace(m_basicPath);
     }
@@ -27,10 +43,8 @@ public class ObjectPlaceTools : MonoBehaviour
         m_destroy = !m_destroy;
         if (m_destroy) 
         {
-            m_place = false;
             m_placer.SetObjectToPlace(null);
         }
-        Debug.Log("Turning Terrain Destroy to: " + m_place.ToString());
     }
 
     public static bool isDestroy()
@@ -40,37 +54,14 @@ public class ObjectPlaceTools : MonoBehaviour
 
     public void ToggleTerrainPlace()
     {
-        m_place = !m_place;
-        if (m_place)
-        {
-            m_placer.SetObjectToPlace(m_basicGroundSeg);
-            m_destroy = false;
-        }
-        else
-        {
-            m_placer.SetObjectToPlace(null);
-        }
-
-        Debug.Log("Turning Terrain Place to: " + m_place.ToString());
+        m_placer.SetObjectToPlace(m_basicGroundSeg);
+        m_destroy = false;
     }
 
     public void ToggleRampPlace()
-    {
-        m_place = !m_place;
-        if (m_place)
-        {
-            m_placer.SetObjectToPlace(m_basicRamp);
-            m_destroy = false;
-        }
-        else
-        {
-            m_placer.SetObjectToPlace(null);
-        }
-    }
-
-    public static bool isTerrainPlace()
-    {
-        return m_place;
+    { 
+        m_placer.SetObjectToPlace(m_basicRamp);
+        m_destroy = false;
     }
 
     public void ToggleTerrainMenu()

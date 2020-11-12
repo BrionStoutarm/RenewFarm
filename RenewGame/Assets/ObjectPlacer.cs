@@ -1,11 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class ObjectPlacer : MonoBehaviour
 {
+    public float m_rotateSpeed = 10000f;
     public Placeable m_objectToPlace = null;
     private GameObject m_preview = null;
+
     private void Awake()
     {
     }
@@ -36,7 +39,6 @@ public class ObjectPlacer : MonoBehaviour
                 //Instantiate(m_objectToPlace).transform.position = placeLoc;
                 m_objectToPlace.Place(placeLoc);
             }
-            
         }
     }
 
@@ -50,7 +52,7 @@ public class ObjectPlacer : MonoBehaviour
         {
             Debug.Log("Should only see this once");
             m_preview = m_objectToPlace.GetPreview();
-            m_preview.layer = LayerMask.NameToLayer("Ignore Raycast");
+            //m_preview.layer = LayerMask.NameToLayer("Ignore Raycast");
         }
     }
 
