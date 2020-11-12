@@ -52,7 +52,21 @@ public class ObjectPlacer : MonoBehaviour
         {
             Debug.Log("Should only see this once");
             m_preview = m_objectToPlace.GetPreview();
-            //m_preview.layer = LayerMask.NameToLayer("Ignore Raycast");
+            ApplyIgnoreRaycastLayer(m_preview.transform);
+        }
+    }
+
+    private void ApplyIgnoreRaycastLayer(Transform root)
+    {
+        Stack<Transform> moveTargets = new Stack<Transform>();
+        moveTargets.Push(root);
+        Transform currentTarget;
+        while (moveTargets.Count != 0)
+        {
+            currentTarget = moveTargets.Pop();
+            currentTarget.gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
+            foreach (Transform child in currentTarget)
+                moveTargets.Push(child);
         }
     }
 

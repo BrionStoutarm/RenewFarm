@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class BasicPathway : Placeable
@@ -11,6 +12,8 @@ public class BasicPathway : Placeable
     private GameObject m_startBlock;
     private GameObject m_endBlock;
     private GameObject m_segmentBlock;
+
+    private List<GameObject> m_segments;
 
     // Start is called before the first frame update
     void Start()
@@ -57,7 +60,10 @@ public class BasicPathway : Placeable
             m_startPosition = position;
             IsPlacing(true);
             m_isStarted = true;
-            Instantiate(m_startBlock).transform.position = position;
+            GameObject start = Instantiate(m_startBlock);
+            start.transform.position = position;
+            start.transform.parent = this.transform;
+
         }
         else
         {
@@ -65,7 +71,32 @@ public class BasicPathway : Placeable
             m_endPosition = position;
             IsPlacing(false);
             m_isStarted = false;
-            Instantiate(m_endBlock).transform.position = position;
+            GameObject start = Instantiate(m_endBlock);
+            start.transform.position = position;
+            start.transform.parent = this.transform;
+            //Fill in the middle
+            FillInPath();
+        }
+    }
+
+    private void FillInPath()
+    {
+        Vector3 pathVec = -(m_startPosition - m_endPosition);
+        Vector3 normPathVec = pathVec.normalized;
+
+        //The segment size
+        float increment = m_segmentBlock.transform.localScale.x;
+        float pathSoFar = 1f;
+
+        while(pathSoFar < pathVec.magnitude)
+        {
+            Vector3 segLoc = m_startPosition + (normPathVec * pathSoFar);
+            pathSoFar += increment;
+            GameObject seg = Instantiate(m_segmentBlock);
+            seg.transform.position = segLoc;
+            seg.transform.parent = this.transform;
+            //m_segments.Add(seg);
+            Debug.Log("adding segment");
         }
     }
 }
