@@ -30,23 +30,9 @@ public class Placeable : MonoBehaviour
     public virtual GameObject GetPreview()
     {
         GameObject obj = Instantiate(this.gameObject);
-        ApplyIgnoreRaycastLayer(obj.transform);
         return obj;
     }
 
-    private void ApplyIgnoreRaycastLayer(Transform root)
-    {
-        Stack<Transform> moveTargets = new Stack<Transform>();
-        moveTargets.Push(root);
-        Transform currentTarget;
-        while (moveTargets.Count != 0)
-        {
-            currentTarget = moveTargets.Pop();
-            currentTarget.gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
-            foreach (Transform child in currentTarget)
-                moveTargets.Push(child);
-        }
-    }
 
     public void IsPlacing(bool val)
     {
