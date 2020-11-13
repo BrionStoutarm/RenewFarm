@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Villager : MonoBehaviour
 {
@@ -9,12 +10,16 @@ public class Villager : MonoBehaviour
     public int m_water = 100;
 
     // Start is called before the first frame update
+
+    public Transform goal;
+
     void Start()
     {
-        
+        NavMeshAgent agent = GetComponent<NavMeshAgent>();
+        agent.destination = goal.position;
     }
 
-    // Update is called once per frame
+    // Tell the villager what they need to do
     void FixedUpdate()
     {
         
