@@ -50,7 +50,11 @@ public class ObjectPlacer : MonoBehaviour
             GameObject toDestroy = GetObjectAtMouse();
             if(toDestroy && Input.GetMouseButtonDown(0))
             {
-                Destroy(toDestroy.gameObject);
+                Placeable placeObj = toDestroy.GetComponent<Placeable>();
+                if(placeObj)
+                {
+                    placeObj.DestroyThis();
+                }
             }
         }
     }
@@ -66,10 +70,9 @@ public class ObjectPlacer : MonoBehaviour
             if (obj.transform.parent != null)
                 obj = obj.transform.parent.gameObject;
 
-            Debug.Log(obj.name);
             if (obj.CompareTag("Placeable"))
             {
-                Debug.Log("Hit Placeable");
+                //Debug.Log("Hit Placeable");
                 return obj;
             }
         }
@@ -121,7 +124,7 @@ public class ObjectPlacer : MonoBehaviour
             Destroy(m_preview);
 
         if (m_objectToPlace)
-            m_objectToPlace.Cancel();
+            m_objectToPlace.CancelPlacement();
 
         m_objectToPlace = null;
         m_preview = null;
@@ -131,7 +134,7 @@ public class ObjectPlacer : MonoBehaviour
     public void SetObjectToPlace(Placeable obj)
     {
         if (m_objectToPlace)
-            m_objectToPlace.Cancel();
+            m_objectToPlace.CancelPlacement();
 
         m_objectToPlace = null;
         m_preview = null;

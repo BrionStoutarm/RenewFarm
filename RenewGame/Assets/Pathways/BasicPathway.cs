@@ -103,7 +103,18 @@ public class BasicPathway : Placeable
         }
     }
 
-    public override void Cancel()
+    public override void DestroyThis()
+    {
+        Destroy(m_startBlock);
+        Destroy(m_endBlock);
+
+        foreach(GameObject obj in m_segments)
+        {
+            Destroy(obj);
+        }
+    }
+
+    public override void CancelPlacement()
     {
         if(m_isStarted)
         {

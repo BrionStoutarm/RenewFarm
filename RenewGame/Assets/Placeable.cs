@@ -33,9 +33,14 @@ public class Placeable : MonoBehaviour
         return obj;
     }
 
-    public virtual void Cancel()
+    public virtual void CancelPlacement()
     {
         IsPlacing(false);
+    }
+
+    public virtual void DestroyThis()
+    {
+        Destroy(this.gameObject);
     }
 
 
