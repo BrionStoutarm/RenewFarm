@@ -38,8 +38,7 @@ public class ObjectPlacer : MonoBehaviour
 
             //Place object
             //TODO:  make sure placeLoc is in playable bounds
-
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(0) && !MouseInput.IsPointerOverUIElement())
             {
                 //Instantiate(m_objectToPlace).transform.position = placeLoc;
                 m_objectToPlace.Place(placeLoc);
@@ -189,4 +188,6 @@ public class ObjectPlacer : MonoBehaviour
 
         return 0;
     }
+
+    ///Returns 'true' if we touched or hovering on Unity UI element.
 }
