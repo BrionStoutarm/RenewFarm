@@ -38,13 +38,16 @@ public class ObjectPlaceTools : MonoBehaviour
         m_placer.SetObjectToPlace(m_basicPath);
     }
 
-    public void ToggleTerrainDestroy ()
+    public void ToggleDestroy ()
     {
         m_destroy = !m_destroy;
-        if (m_destroy) 
+        if (m_destroy)
         {
-            m_placer.SetObjectToPlace(null);
+            m_placer.ClearPlacer();
+            m_placer.SetDestroy(true);
         }
+        else
+            m_placer.SetDestroy(false);
     }
 
     public static bool isDestroy()

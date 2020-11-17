@@ -8,6 +8,7 @@ public class ObjectPlacer : MonoBehaviour
     public float m_rotateSpeed = 10000f;
     public Placeable m_objectToPlace = null;
     private GameObject m_preview = null;
+    private bool m_destroy = false;
 
     private void Awake()
     {
@@ -21,6 +22,10 @@ public class ObjectPlacer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(Input.GetMouseButtonDown(1))
+        {
+            ClearPlacer();
+        }
         if (m_objectToPlace)
         {
             m_objectToPlace.IsPlacing(true);
@@ -40,6 +45,41 @@ public class ObjectPlacer : MonoBehaviour
                 m_objectToPlace.Place(placeLoc);
             }
         }
+        else if(m_destroy)
+        {
+            GameObject toDestroy = GetObjectAtMouse();
+            if(toDestroy && Input.GetMouseButtonDown(0))
+            {
+                Destroy(toDestroy.gameObject);
+            }
+        }
+    }
+
+    private GameObject GetObjectAtMouse()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit))
+        {
+            GameObject obj = hit.transform.gameObject;
+            if (obj.transform.parent != null)
+                obj = obj.transform.parent.gameObject;
+
+            Debug.Log(obj.name);
+            if (obj.CompareTag("Placeable"))
+            {
+                Debug.Log("Hit Placeable");
+                return obj;
+            }
+        }
+
+        return null;
+    }
+    public void SetDestroy(bool val)
+    {
+        Debug.Log("Setting placer destroy to: " + val.ToString());
+        m_destroy = val;
     }
 
     private void ShowPreview(Vector3 placeLoc)
@@ -77,12 +117,22 @@ public class ObjectPlacer : MonoBehaviour
 
     public void ClearPlacer()
     {
+        if (m_preview != null)
+            Destroy(m_preview);
+
+        if (m_objectToPlace)
+            m_objectToPlace.Cancel();
+
         m_objectToPlace = null;
         m_preview = null;
+        m_destroy = false;
     }
 
     public void SetObjectToPlace(Placeable obj)
     {
+        if (m_objectToPlace)
+            m_objectToPlace.Cancel();
+
         m_objectToPlace = null;
         m_preview = null;
         m_objectToPlace = obj;

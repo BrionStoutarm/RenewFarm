@@ -33,6 +33,11 @@ public class Placeable : MonoBehaviour
         return obj;
     }
 
+    public virtual void Cancel()
+    {
+        IsPlacing(false);
+    }
+
 
     public void IsPlacing(bool val)
     {
