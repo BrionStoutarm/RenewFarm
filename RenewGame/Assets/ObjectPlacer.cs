@@ -6,17 +6,18 @@ using UnityEngine.EventSystems;
 public class ObjectPlacer : MonoBehaviour
 {
     public float m_rotateSpeed = 10000f;
+    public float m_heightModifier = .25f;
     public Placeable m_objectToPlace = null;
     private GameObject m_preview = null;
     private bool m_destroy = false;
-
+    private Vector3 m_lastPos;
     private void Awake()
     {
     }
     // Start is called before the first frame update
     void Start()
     {
-        
+        m_lastPos = new Vector3(0, 0, 0);
     }
 
     // Update is called once per frame
@@ -33,8 +34,10 @@ public class ObjectPlacer : MonoBehaviour
             //Get mouse point
             Vector3 placeLoc = GetPlaceLoc();
 
-            //Show preview
+            //Show preview -- will show whether it can be placed in that spot or not
             ShowPreview(placeLoc);
+
+            //Snap preview to snappable locations
 
             //Place object
             //TODO:  make sure placeLoc is in playable bounds
@@ -149,9 +152,26 @@ public class ObjectPlacer : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit))
         {
-            Vector3 offset = m_objectToPlace.transform.localScale;
-            placePos = hit.point;
-            placePos.y = placePos.y + (offset.y / 2);
+            //Only change y value when shift is held down
+            if(Input.GetKey(KeyCode.LeftShift) && m_lastPos.magnitude > 0)
+            {
+                placePos = m_lastPos;
+                if(Input.GetAxis("Mouse Y") > 0)
+                {
+                    placePos.y += m_heightModifier * Time.deltaTime;
+                }
+                else if(Input.GetAxis("Mouse Y") < 0)
+                {
+                    placePos.y -= m_heightModifier * Time.deltaTime;
+                }
+            }            
+            else
+            {
+                Vector3 offset = m_objectToPlace.transform.localScale;
+                placePos = hit.point;
+                placePos.y = placePos.y + (offset.y / 2);
+            }
+            m_lastPos = placePos;
         }
 
         return placePos;
@@ -189,5 +209,4 @@ public class ObjectPlacer : MonoBehaviour
         return 0;
     }
 
-    ///Returns 'true' if we touched or hovering on Unity UI element.
 }

@@ -33,9 +33,10 @@ public class ObjectPlaceTools : MonoBehaviour
 
     public void TogglePathwayPlace()
     {
-        Debug.Log("Pathway Placement");
         m_placer.ClearPlacer();
         m_placer.SetObjectToPlace(m_basicPath);
+        m_destroy = false;
+        Debug.Log("Pathway Placement");
     }
 
     public void ToggleDestroy ()

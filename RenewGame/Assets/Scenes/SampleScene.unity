@@ -311,6 +311,7 @@ GameObject:
   m_Component:
   - component: {fileID: 143427346}
   - component: {fileID: 143427344}
+  - component: {fileID: 143427345}
   m_Layer: 0
   m_Name: _Manager
   m_TagString: Untagged
@@ -336,6 +337,18 @@ MonoBehaviour:
   m_basicFarm: {fileID: 9428139}
   m_basicIndustry: {fileID: 316505215}
   m_placer: {fileID: 2043348753}
+--- !u!114 &143427345
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 143427343}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5f84c8e6ee214b4ca88359e394e9ca2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &143427346
 Transform:
   m_ObjectHideFlags: 0
@@ -796,7 +809,7 @@ GameObject:
   - component: {fileID: 228651987}
   m_Layer: 0
   m_Name: BasicPathway
-  m_TagString: Untagged
+  m_TagString: Placeable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4637,6 +4650,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_rotateSpeed: 1
+  m_heightModifier: 5
   m_objectToPlace: {fileID: 0}
 --- !u!4 &2043348754
 Transform:
