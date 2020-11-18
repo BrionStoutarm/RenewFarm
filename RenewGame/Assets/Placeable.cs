@@ -27,9 +27,9 @@ public class Placeable : MonoBehaviour
         IsPlacing(false);
     }
 
-    public virtual GameObject GetPreview()
+    public virtual Transform GetPreview()
     {
-        GameObject obj = Instantiate(this.gameObject);
+        Transform obj = Instantiate(this.transform);
         return obj;
     }
 

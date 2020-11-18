@@ -8,7 +8,7 @@ public class ObjectPlacer : MonoBehaviour
     public float m_rotateSpeed = 10000f;
     public float m_heightModifier = .25f;
     public Placeable m_objectToPlace = null;
-    private GameObject m_preview = null;
+    private Transform m_preview = null;
     private bool m_destroy = false;
     private Vector3 m_lastPos;
     private void Awake()

@@ -9,13 +9,11 @@ public class BasicPathway : Placeable
     private Vector3 m_startPosition;
     private Vector3 m_endPosition;
 
-    private GameObject m_startModel;
-    private GameObject m_endModel;
-    private GameObject m_segmentModel;
+    public Transform m_startModel;
+    public Transform m_endModel;
+    public Transform m_segmentModel;
 
-    private GameObject m_startBlock;
-    private GameObject m_endBlock;
-    private List<GameObject> m_segments;
+    private List<Transform> m_segments;
 
     // Start is called before the first frame update
     void Start()
@@ -23,11 +21,7 @@ public class BasicPathway : Placeable
         m_startPosition = new Vector3(-1, -1, -1);
         m_endPosition = new Vector3(-1, -1, -1);
 
-        m_startModel = Instantiate(GameObject.Find("StartPathBlock"));
-        m_endModel = Instantiate(GameObject.Find("EndPathBlock"));
-        m_segmentModel = Instantiate(GameObject.Find("SegmentPathBlock"));
-
-        m_segments = new List<GameObject>();
+        m_segments = new List<Transform>();
     }
 
     // Update is called once per frame
@@ -48,7 +42,7 @@ public class BasicPathway : Placeable
         }
     }
 
-    public override GameObject GetPreview()
+    public override Transform GetPreview()
     {
         if (m_isStarted)
             return Instantiate(m_endModel);
@@ -60,26 +54,26 @@ public class BasicPathway : Placeable
     {
         if(!m_isStarted)
         {
+            IsPlacing(true);
             Debug.Log("Starting pathway placement");
             m_startPosition = position;
-            IsPlacing(true);
             m_isStarted = true;
-            m_startBlock = Instantiate(m_startModel);
-            m_startBlock.transform.position = position;
-            m_startBlock.transform.parent = this.transform;
+            Transform start = Instantiate(m_startModel);
+            start.transform.position = position;
+            start.transform.parent = this.transform;
 
         }
         else
         {
             Debug.Log("Ending pathway placement");
             m_endPosition = position;
-            IsPlacing(false);
             m_isStarted = false;
-            m_endBlock = Instantiate(m_endModel);
-            m_endBlock.transform.position = position;
-            m_endBlock.transform.parent = this.transform;
+            Transform end = Instantiate(m_endModel);
+            end.transform.position = position;
+            end.transform.parent = this.transform;
             //Fill in the middle
             FillInPath();
+            IsPlacing(false);
         }
     }
 
@@ -96,7 +90,7 @@ public class BasicPathway : Placeable
         {
             Vector3 segLoc = m_startPosition + (normPathVec * pathSoFar);
             pathSoFar += increment;
-            GameObject seg = Instantiate(m_segmentModel);
+            Transform seg = Instantiate(m_segmentModel);
             seg.transform.position = segLoc;
             seg.transform.parent = this.transform;
             m_segments.Add(seg);
@@ -105,10 +99,10 @@ public class BasicPathway : Placeable
 
     public override void DestroyThis()
     {
-        Destroy(m_startBlock);
-        Destroy(m_endBlock);
+        Destroy(m_startModel);
+        Destroy(m_endModel);
 
-        foreach(GameObject obj in m_segments)
+        foreach(Transform obj in m_segments)
         {
             Destroy(obj);
         }
@@ -118,7 +112,7 @@ public class BasicPathway : Placeable
     {
         if(m_isStarted)
         {
-            Destroy(m_startBlock);
+            Destroy(m_startModel);
             m_isStarted = false;
         }
     }
