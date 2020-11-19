@@ -23,6 +23,7 @@ public class Placeable : MonoBehaviour
 
     public virtual void Place(Vector3 position)
     {
+        Debug.Log("Inside baseclass Place");
         Instantiate(this.gameObject).transform.position = position;
         IsPlacing(false);
     }

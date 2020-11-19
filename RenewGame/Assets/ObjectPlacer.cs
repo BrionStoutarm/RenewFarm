@@ -97,7 +97,8 @@ public class ObjectPlacer : MonoBehaviour
         {
             Debug.Log("Should only see this once");
             m_preview = m_objectToPlace.GetPreview();
-            ApplyIgnoreRaycastLayer(m_preview.transform);
+            if(m_preview != null)
+                ApplyIgnoreRaycastLayer(m_preview.transform);
         }
     }
 
@@ -123,7 +124,7 @@ public class ObjectPlacer : MonoBehaviour
     public void ClearPlacer()
     {
         if (m_preview != null)
-            Destroy(m_preview);
+            Destroy(m_preview.gameObject);
 
         if (m_objectToPlace)
             m_objectToPlace.CancelPlacement();

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq.Expressions;
 using UnityEngine;
 
 public class BasicPathway : Placeable
@@ -9,110 +10,101 @@ public class BasicPathway : Placeable
     private Vector3 m_startPosition;
     private Vector3 m_endPosition;
 
-    public Transform m_startModel;
-    public Transform m_endModel;
-    public Transform m_segmentModel;
-
-    private List<Transform> m_segments;
-
+    public Transform m_pathModel;
+    private Transform m_currentPath;
     // Start is called before the first frame update
     void Start()
     {
         m_startPosition = new Vector3(-1, -1, -1);
         m_endPosition = new Vector3(-1, -1, -1);
-
-        m_segments = new List<Transform>();
     }
 
     // Update is called once per frame
     void Update()
     {
+
         //stretch pathway from startpos to mousepos
         if(m_isStarted)
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            Vector3 mousePos = new Vector3(0, 0, 0);
-
-            if (Physics.Raycast(ray, out hit))
-            {
-                mousePos = hit.point;
-                Debug.DrawLine(m_startPosition, mousePos, Color.red);
-            }
+            Vector3 mousePos = GetMousePoint();
+            RotateTowardsMouse(mousePos);
+            StretchToPoint(mousePos);
+            Debug.DrawLine(m_startPosition, mousePos, Color.red);
         }
+    }
+
+    private Vector3 GetMousePoint()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+        Vector3 mousePos = new Vector3(0, 0, 0);
+
+        if (Physics.Raycast(ray, out hit))
+        {
+            mousePos = hit.point;
+        }
+
+        return mousePos;
+    }
+
+    private void StretchToPoint(Vector3 mousePos)
+    {
+        Vector3 scale = new Vector3(1, 0.025f, 1);
+        scale.z = Vector3.Distance(m_startPosition, mousePos);
+        m_currentPath.localScale = scale;
+    }
+
+    private void RotateTowardsMouse(Vector3 mousePos)
+    {
+        m_currentPath.transform.forward = mousePos - m_startPosition;
     }
 
     public override Transform GetPreview()
     {
-        if (m_isStarted)
-            return Instantiate(m_endModel);
-        else
-            return Instantiate(m_startModel);
+        return Instantiate(m_pathModel);
     }
 
     public override void Place(Vector3 position)
     {
         if(!m_isStarted)
         {
-            IsPlacing(true);
-            Debug.Log("Starting pathway placement");
+            Debug.Log("Starting pathway");
+            m_currentPath = Instantiate(m_pathModel);
+            m_currentPath.transform.position = position;
             m_startPosition = position;
             m_isStarted = true;
-            Transform start = Instantiate(m_startModel);
-            start.transform.position = position;
-            start.transform.parent = this.transform;
-
         }
         else
         {
-            Debug.Log("Ending pathway placement");
             m_endPosition = position;
+            Debug.Log("Ending pathway");
+            m_currentPath = null;
             m_isStarted = false;
-            Transform end = Instantiate(m_endModel);
-            end.transform.position = position;
-            end.transform.parent = this.transform;
-            //Fill in the middle
-            FillInPath();
-            IsPlacing(false);
         }
     }
 
     private void FillInPath()
     {
-        Vector3 pathVec = -(m_startPosition - m_endPosition);
-        Vector3 normPathVec = pathVec.normalized;
 
-        //The segment size
-        float increment = m_segmentModel.transform.localScale.x;
-        float pathSoFar = 1f;
-
-        while(pathSoFar < pathVec.magnitude)
-        {
-            Vector3 segLoc = m_startPosition + (normPathVec * pathSoFar);
-            pathSoFar += increment;
-            Transform seg = Instantiate(m_segmentModel);
-            seg.transform.position = segLoc;
-            seg.transform.parent = this.transform;
-            m_segments.Add(seg);
-        }
     }
 
     public override void DestroyThis()
     {
-        Destroy(m_startModel);
-        Destroy(m_endModel);
+        Destroy(this.gameObject);
+        //Destroy(m_startModel);
+        //Destroy(m_endModel);
 
-        foreach(Transform obj in m_segments)
-        {
-            Destroy(obj);
-        }
+        //foreach(Transform obj in m_segments)
+        //{
+        //    Destroy(obj);
+        //}
     }
 
     public override void CancelPlacement()
     {
-        if(m_isStarted)
+        if (m_isStarted)
         {
-            Destroy(m_startModel);
+            Destroy(m_currentPath.gameObject);
             m_isStarted = false;
         }
     }
