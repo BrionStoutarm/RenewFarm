@@ -61,7 +61,7 @@ GameObject:
   - component: {fileID: 2810139741162552981}
   m_Layer: 2
   m_Name: PathModel
-  m_TagString: Untagged
+  m_TagString: Placeable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

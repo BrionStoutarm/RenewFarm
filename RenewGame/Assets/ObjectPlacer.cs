@@ -8,6 +8,7 @@ public class ObjectPlacer : MonoBehaviour
     public float m_rotateSpeed = 10000f;
     public float m_heightModifier = .25f;
     public Placeable m_objectToPlace = null;
+    private Placeable m_currentObject = null;
     private Transform m_preview = null;
     private bool m_destroy = false;
     private Vector3 m_lastPos;
@@ -29,8 +30,6 @@ public class ObjectPlacer : MonoBehaviour
         }
         if (m_objectToPlace)
         {
-            m_objectToPlace.IsPlacing(true);
-
             //Get mouse point
             Vector3 placeLoc = GetPlaceLoc();
 
@@ -41,22 +40,27 @@ public class ObjectPlacer : MonoBehaviour
 
             //Place object
             //TODO:  make sure placeLoc is in playable bounds
-            if (Input.GetMouseButtonDown(0) && !MouseInput.IsPointerOverUIElement())
+            if (Input.GetMouseButtonDown(0) && !StaticMethods.IsPointerOverUIElement())
             {
-                //Instantiate(m_objectToPlace).transform.position = placeLoc;
-                m_objectToPlace.Place(placeLoc);
+                if (m_currentObject == null)
+                    m_currentObject = Instantiate(m_objectToPlace);
+
+                m_currentObject.Place(placeLoc);
+                if (m_currentObject.IsDonePlacing())
+                {
+                    m_currentObject = null;
+                }
+                //m_objectToPlace.Place(placeLoc);
             }
+
         }
         else if(m_destroy)
         {
             GameObject toDestroy = GetObjectAtMouse();
+
             if(toDestroy && Input.GetMouseButtonDown(0))
             {
-                Placeable placeObj = toDestroy.GetComponent<Placeable>();
-                if(placeObj)
-                {
-                    placeObj.DestroyThis();
-                }
+                Destroy(toDestroy.gameObject);
             }
         }
     }
@@ -68,13 +72,14 @@ public class ObjectPlacer : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit))
         {
+            //Get parent object
             GameObject obj = hit.transform.gameObject;
             if (obj.transform.parent != null)
                 obj = obj.transform.parent.gameObject;
 
             if (obj.CompareTag("Placeable"))
             {
-                //Debug.Log("Hit Placeable");
+                Debug.Log("Hit Placeable");
                 return obj;
             }
         }
@@ -98,21 +103,7 @@ public class ObjectPlacer : MonoBehaviour
             Debug.Log("Should only see this once");
             m_preview = m_objectToPlace.GetPreview();
             if(m_preview != null)
-                ApplyIgnoreRaycastLayer(m_preview.transform);
-        }
-    }
-
-    private void ApplyIgnoreRaycastLayer(Transform root)
-    {
-        Stack<Transform> moveTargets = new Stack<Transform>();
-        moveTargets.Push(root);
-        Transform currentTarget;
-        while (moveTargets.Count != 0)
-        {
-            currentTarget = moveTargets.Pop();
-            currentTarget.gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
-            foreach (Transform child in currentTarget)
-                moveTargets.Push(child);
+                StaticMethods.ApplyIgnoreRaycastLayer(m_preview.transform);
         }
     }
 
@@ -144,6 +135,9 @@ public class ObjectPlacer : MonoBehaviour
         m_objectToPlace = obj;
     }
 
+
+    //TODO:
+    //  -- Make the height modifier a Placeable method
     Vector3 GetPlaceLoc()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);

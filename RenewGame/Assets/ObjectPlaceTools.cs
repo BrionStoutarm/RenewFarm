@@ -18,8 +18,7 @@ public class ObjectPlaceTools : MonoBehaviour
     public void PlaceBasicFarm()
     {
         m_placer.ClearPlacer();
-        Placeable obj = Instantiate(m_basicFarm);
-        m_placer.SetObjectToPlace(obj);
+        m_placer.SetObjectToPlace(m_basicFarm);
         m_destroy = false;
         Debug.Log("placing farm");
     }
@@ -27,8 +26,7 @@ public class ObjectPlaceTools : MonoBehaviour
     public void PlaceBasicIndustry()
     {
         m_placer.ClearPlacer();
-        Placeable obj = Instantiate(m_basicIndustry);
-        m_placer.SetObjectToPlace(obj);
+        m_placer.SetObjectToPlace(m_basicIndustry);
         m_destroy = false;
         Debug.Log("placing industry");
     }    
@@ -36,8 +34,7 @@ public class ObjectPlaceTools : MonoBehaviour
     public void TogglePathwayPlace()
     {
         m_placer.ClearPlacer();
-        Placeable obj = Instantiate(m_basicPath);
-        m_placer.SetObjectToPlace(obj);
+        m_placer.SetObjectToPlace(m_basicPath);
         m_destroy = false;
         Debug.Log("Pathway Placement");
     }

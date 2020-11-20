@@ -7,11 +7,11 @@ public class Placeable : MonoBehaviour
     public Color startColor;
     public Color highlightColor;
 
-    private bool m_isPlacing;
+    private bool m_isDonePlacing;
     // Start is called before the first frame update
     void Start()
     {
-        m_isPlacing = false;
+        m_isDonePlacing = true;
     }
 
     // Update is called once per frame
@@ -24,8 +24,8 @@ public class Placeable : MonoBehaviour
     public virtual void Place(Vector3 position)
     {
         Debug.Log("Inside baseclass Place");
-        Instantiate(this.gameObject).transform.position = position;
-        IsPlacing(false);
+        this.transform.position = position;
+        IsDonePlacing(true);
     }
 
     public virtual Transform GetPreview()
@@ -36,7 +36,7 @@ public class Placeable : MonoBehaviour
 
     public virtual void CancelPlacement()
     {
-        IsPlacing(false);
+        IsDonePlacing(true);
     }
 
     public virtual void DestroyThis()
@@ -45,13 +45,13 @@ public class Placeable : MonoBehaviour
     }
 
 
-    public void IsPlacing(bool val)
+    public void IsDonePlacing(bool val)
     {
-        m_isPlacing = val;
+        m_isDonePlacing = val;
     }
 
-    public bool IsPlacing()
+    public bool IsDonePlacing()
     {
-        return m_isPlacing;
+        return m_isDonePlacing;
     }    
 }

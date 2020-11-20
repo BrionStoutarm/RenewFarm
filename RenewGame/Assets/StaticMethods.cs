@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class MouseInput : MonoBehaviour
+public class StaticMethods : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()
@@ -40,5 +40,23 @@ public class MouseInput : MonoBehaviour
         List<RaycastResult> raysastResults = new List<RaycastResult>();
         EventSystem.current.RaycastAll(eventData, raysastResults);
         return raysastResults;
+    }
+
+    public static void ApplyIgnoreRaycastLayer(Transform root, bool val = true)
+    {
+        Stack<Transform> moveTargets = new Stack<Transform>();
+        moveTargets.Push(root);
+        Transform currentTarget;
+        while (moveTargets.Count != 0)
+        {
+            currentTarget = moveTargets.Pop();
+            if (val)
+                currentTarget.gameObject.layer = currentTarget.gameObject.layer | LayerMask.NameToLayer("Ignore Raycast");
+            else
+                currentTarget.gameObject.layer = currentTarget.gameObject.layer & ~LayerMask.NameToLayer("Ignore Raycast");
+
+            foreach (Transform child in currentTarget)
+                moveTargets.Push(child);
+        }
     }
 }
